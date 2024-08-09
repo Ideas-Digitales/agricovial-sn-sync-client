@@ -65,7 +65,7 @@ if orders:
     logger.message("Inicia la importación de órdenes")
     
     for o in orders:
-        exists = orderModel.checkIfNumOCExists(o['NumOC'])
+        exists = orderModel.checkIfNumOCExists(o['NumOC'], o['NvFem'])
         
         # Importante eliminar str(o['NumOC']) == '3832', esa orden de compra esta asociada a un producto en la papelera de wc
         # ocurre un error porque dicho producto no esta en softland (y no debe estarlo)
