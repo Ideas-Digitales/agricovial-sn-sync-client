@@ -13,18 +13,18 @@ cursor = conn.cursor()
 
 
 # OBTENER TODO
-cursor.execute("EXEC OBT_DOC_IMPAGOS '2023-09-01', '2023-10-10', 'DCTO_IMPAGOS', 1");
-cursor.execute("SELECT * FROM DCTO_IMPAGOS INNER JOIN softland.cwtauxi ON softland.cwtauxi.CodAux = DCTO_IMPAGOS.Client WHERE EstadoDoc = 'IMPAGO'");
-row = cursor.fetchone()
-doctos = []
+# cursor.execute("EXEC OBT_DOC_IMPAGOS '2023-09-01', '2023-10-10', 'DCTO_IMPAGOS', 1");
+# cursor.execute("SELECT * FROM DCTO_IMPAGOS INNER JOIN softland.cwtauxi ON softland.cwtauxi.CodAux = DCTO_IMPAGOS.Client WHERE EstadoDoc = 'IMPAGO'");
+# row = cursor.fetchone()
+# doctos = []
 
-while row:
-    doctos.append(row)
-    row = cursor.fetchone()
+# while row:
+#     doctos.append(row)
+#     row = cursor.fetchone()
 
-doctos = json.dumps(doctos, default=str)
-r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=documentos', json=doctos)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+# doctos = json.dumps(doctos, default=str)
+# r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=documentos', json=doctos)
+# print(f"Status Code: {r.status_code}, Response: {r.json()}")
 
 
 
@@ -39,7 +39,7 @@ while row:
 
 giros = json.dumps(giros)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=giros', json=giros)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"GIROS: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 # PROVINCIAS
@@ -53,7 +53,7 @@ while row:
 
 provincias = json.dumps(provincias)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=provincias', json=provincias)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"PROVINCIAS: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 # REGIONES
@@ -67,7 +67,7 @@ while row:
 
 regiones = json.dumps(regiones)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=regiones', json=regiones)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"REGIONES: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 # CIUDAD
@@ -81,7 +81,7 @@ while row:
 
 ciudades = json.dumps(ciudades)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=ciudades', json=ciudades)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"CIUDAD: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 
@@ -96,7 +96,7 @@ while row:
 
 comunas = json.dumps(comunas)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=comunas', json=comunas)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"COMUNAS: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 
@@ -111,7 +111,7 @@ while row:
 
 canalesventas = json.dumps(canalesventas, default=str)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=canalesventas', json=canalesventas)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"CANALESVENTAS: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 # VENDEDORES
@@ -125,7 +125,7 @@ while row:
 
 vendedores = json.dumps(vendedores, default=str)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=vendedores', json=vendedores)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"VENDEDORES: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 # AUXILIARES
@@ -139,7 +139,7 @@ while row:
 
 auxiliares = json.dumps(auxiliares, default=str)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=auxiliares', json=auxiliares)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"AUXILIARES: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 # CLIENTES
@@ -153,7 +153,7 @@ while row:
 
 clientes = json.dumps(clientes, default=str)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=clientes', json=clientes)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"CLIENTES: Status Code: {r.status_code}, Response: {r.json()}")
 
 # DIRECCIONES
 cursor.execute("SELECT * FROM softland.cwtauxd;");
@@ -166,7 +166,7 @@ while row:
 
 direcciones = json.dumps(direcciones, default=str)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=direcciones', json=direcciones)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"DIRECCIONES: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 conn.close()
@@ -185,7 +185,7 @@ while row:
 
 auxiliares = json.dumps(auxiliares, default=str)
 r = requests.post('https://www.agricovial.cl/wp-json/sync/v1/process-variables?type=despacho', json=auxiliares)
-print(f"Status Code: {r.status_code}, Response: {r.json()}")
+print(f"DESPACHO: Status Code: {r.status_code}, Response: {r.json()}")
 
 
 
