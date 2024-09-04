@@ -4,6 +4,7 @@ from dotenv import dotenv_values
 import sys
 from Logger import Logger
 from OrderModel import OrderModel
+from EmailSender import EmailSender
 
 config = dotenv_values(".env")
 server = config.get("DB_SERVER")
@@ -12,10 +13,6 @@ password = config.get("DB_PASSWORD")
 database = config.get("DB_DATABASE")
 endpoint = config.get("ORDER_API_ENDPOINT")
 logger = Logger()
-orderModel = OrderModel(server, user, password, database)
-
-conn = pymssql.connect(server, user, password, database)
-cursor = conn.cursor()
 
 clients = []
 orders = []
@@ -23,9 +20,20 @@ orders = []
 try:
     
     orders_response = requests.get(endpoint)
+    
+    if orders_response.status_code != 200:
+        raise Exception("BAD HTTP CODE " + str(orders_response.status_code))
+    
     orders_response = orders_response.json()
+    
+    required_keys = ['orders', 'orders_size', 'msg', 'time']
+    
+    if any(key not in orders_response for key in required_keys):
+        raise Exception("BAD RESPONSE -> " + str(orders_response))
+    
     orders = orders_response['orders']
     # clients = orders_response['clients']
+    print("script successfully executed")
     
 except Exception as e:
      
@@ -59,6 +67,10 @@ except Exception as e:
 #             conn.commit()
 #         except Exception as e:
 #             logger.error(str(e))
+
+conn = pymssql.connect(server, user, password, database)
+cursor = conn.cursor()
+orderModel = OrderModel(server, user, password, database)
 
 if orders:
     

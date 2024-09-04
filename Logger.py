@@ -1,5 +1,6 @@
 from os import getcwd, path
 from datetime import datetime
+from EmailSender import EmailSender
 
 class Logger:
 
@@ -25,8 +26,10 @@ class Logger:
     def error(self, err):
         today = datetime.now()
         self.logFile.write("\n" + today.strftime("%Y-%m-%d %H:%M:%S") + " " + err)
-        self.messagesLogFile.write("\nERROR: " + today.strftime("%Y-%m-%d %H:%M:%S") + " " + err)
-        print("\nERROR: " + today.strftime("%Y-%m-%d %H:%M:%S") + " " + err)
+        error = today.strftime("%Y-%m-%d %H:%M:%S") + " " + err
+        self.messagesLogFile.write("\n" + error)
+        email = EmailSender()
+        email.send_email("ERROR: SINCRONIZACIÓN DE NOTAS DE VENTA", error)
         
     def message(self, message):
         today = datetime.now()
