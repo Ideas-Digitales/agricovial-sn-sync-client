@@ -32,8 +32,11 @@ try:
         raise Exception("BAD RESPONSE -> " + str(orders_response))
     
     orders = orders_response['orders']
-    # clients = orders_response['clients']
-    print("script successfully executed")
+    clients = orders_response['clients']
+    
+    if not orders:
+        email = EmailSender()
+        email.send_email("ALERTA: SINCRONIZACIÓN DE NOTAS DE VENTA", "Lista de órdenes vacía al intentar la sincronización")
     
 except Exception as e:
      
@@ -67,11 +70,16 @@ except Exception as e:
 #             conn.commit()
 #         except Exception as e:
 #             logger.error(str(e))
+orderModel = None
 
-conn = pymssql.connect(server, user, password, database)
-cursor = conn.cursor()
-orderModel = OrderModel(server, user, password, database)
-
+try:
+    conn = pymssql.connect(server, user, password, database)
+    cursor = conn.cursor()
+    orderModel = OrderModel(server, user, password, database)
+except Exception as e:
+    logger.error("ON DATABASE CONNECTION: " + str(e))
+    sys.exit()
+    
 if orders:
     
     logger.message("Inicia la importación de órdenes")
@@ -99,20 +107,20 @@ if orders:
                 
         except Exception as e:
 
-            logger.error("No se pudo ingresar la orden " + o['NumOC'])
-            logger.error(str(e))
-            logger.error("SQL Queries")
+            error = "No se pudo ingresar la orden " + o['NumOC'] + "\n" + str(e) + "\nSQL Queries:"
             
             for key in checkClientQueries:
-                logger.error(str(o[key]))
+                error += "\n" + str(o[key])
                 
             try:
                 conn.close()
             except Exception as ex:
-                logger.error(str(ex))
+                error += "\n" + str(ex)
             finally:
                 conn = pymssql.connect(server, user, password, database)
                 cursor = conn.cursor()
+                
+            logger.error(error)
             
             continue
             
@@ -184,17 +192,17 @@ if orders:
                 
         except Exception as e:
             
-            logger.error("Falló al insertar la orden número " + str(o['NumOC']))
-            logger.error(str(e))
-            logger.error("SQL Query: " + sql)
+            error = "Falló al insertar la orden número " + str(o['NumOC']) + "\n" + str(e) + "\nSQL Query: " + sql
             
             try:
                 conn.close()
             except Exception as ex:
-                logger.error(str(ex))
+                error += "\n" + str(ex)
             finally:
                 conn = pymssql.connect(server, user, password, database)
                 cursor = conn.cursor()
+                
+            logger.error(error)
 
 logger.message("Termina la importación de órdenes")
 orderModel.connection.close()
