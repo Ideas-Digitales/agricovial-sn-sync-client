@@ -26,4 +26,4 @@ class EmailSender:
             if self.smtp_auth == "SSL":
                 server.starttls()
             server.login(self.smtp_user, self.smtp_password)
-            server.sendmail(self.smtp_user, self.smtp_recipient, message.as_string())
+            server.sendmail(self.smtp_user, self.smtp_recipient.split(","), message.as_string())
