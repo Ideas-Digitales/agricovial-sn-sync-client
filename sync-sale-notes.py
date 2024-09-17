@@ -12,6 +12,7 @@ user = config.get("DB_USER")
 password = config.get("DB_PASSWORD")
 database = config.get("DB_DATABASE")
 endpoint = config.get("ORDER_API_ENDPOINT")
+httpTimeout = int(config.get("HTTP_TIMEOUT", 60))
 logger = Logger()
 
 clients = []
@@ -19,7 +20,7 @@ orders = []
 
 try:
     
-    orders_response = requests.get(endpoint)
+    orders_response = requests.get(endpoint, timeout=httpTimeout)
     
     if orders_response.status_code != 200:
         raise Exception("BAD HTTP CODE " + str(orders_response.status_code))
@@ -85,7 +86,7 @@ if orders:
     logger.message("Inicia la importación de órdenes")
     
     for o in orders:
-        exists = orderModel.checkIfNumOCExists(o['NumOC'], o['NvFem'])
+        exists = orderModel.checkIfNumOCExists(o['NumOC'], o['nvFem'])
         
         # Importante eliminar str(o['NumOC']) == '3832', esa orden de compra esta asociada a un producto en la papelera de wc
         # ocurre un error porque dicho producto no esta en softland (y no debe estarlo)
