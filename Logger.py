@@ -28,8 +28,13 @@ class Logger:
         self.logFile.write("\n" + today.strftime("%Y-%m-%d %H:%M:%S") + " " + err)
         error = today.strftime("%Y-%m-%d %H:%M:%S") + " " + err
         self.messagesLogFile.write("\n" + error)
-        email = EmailSender()
-        email.send_email("ERROR: SINCRONIZACIÓN DE NOTAS DE VENTA", error)
+        
+        try:
+            email = EmailSender()
+            email.send_email("ERROR: SINCRONIZACIÓN DE NOTAS DE VENTA", error)
+        except Exception as e:
+            self.logFile.write("\n" + today.strftime("%Y-%m-%d %H:%M:%S") + " " + str(e))
+            
         
     def message(self, message):
         today = datetime.now()
